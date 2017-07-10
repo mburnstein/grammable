@@ -1,34 +1,37 @@
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <a class="navbar-brand" href="#">Hidden brand</a>
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+<div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+  <% @grams.each do |gram| %>
+  <div class="card">
+    <div class="handle"><%= gram.user.email %></div>
+    <%= image_tag gram.picture, class: 'img-fluid' %>
+    <p>
+      <%= gram.message %>
+    </p>
+
+    <div class="gram-actions float-right">
+      <% if current_user && current_user == gram.user %>
+        <%= link_to 'Edit', edit_gram_path(gram) %>
+        <%= link_to 'Destroy', gram_path(gram), method: :delete, data: {confirm: 'Are you sure?'} %>
+      <% end %>
+    </div>
+    <br class="clear-fix" />
+    <div class="comments">
+      <h3>Comments</h3>
+      <% gram.comments.each do |comment| %>
+        <div class="comment">
+          <span class="comment_handle">
+            <%= comment.user.email %>
+          </span>
+
+          <%= comment.message %>
+        </div>
+      <% end %>
+
+      <h4>Add a comment</h4>
+      <%= simple_form_for Comment.new, url: gram_comments_path(gram) do |f| %>
+        <%= f.input :message %>
+        <%= f.submit 'Add Comment', class: 'my-btn' %>
+      <% end %>
+    </div>
   </div>
-</nav>
-
-
-
-<h1>Grams here</h1>
-
-<% @grams.each do |gram| %>
-  <div>
-    <%= gram.message %>
-    <%= image_tag gram.picture %>
-  </div>
-<% end %>
+  <% end %>
+</div>

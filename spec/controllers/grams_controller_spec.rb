@@ -56,6 +56,7 @@ RSpec.describe GramsController, type: :controller do
       it "should allow users to successfully update grams" do
         gram = FactoryGirl.create(:gram, message: "Initial Value")
         sign_in gram.user
+
         patch :update, params: { id: gram.id, gram: { message: 'Changed' } }
         expect(response).to redirect_to root_path
         gram.reload
@@ -72,6 +73,7 @@ RSpec.describe GramsController, type: :controller do
       it "should render the edit form with an http status of unprocessable_entity" do
         gram = FactoryGirl.create(:gram, message: "Initial Value")
         sign_in gram.user
+
         patch :update, params: { id: gram.id, gram: { message: '' } }
         expect(response).to have_http_status(:unprocessable_entity)
         gram.reload
